@@ -1,5 +1,3 @@
-// Datamuse API: https://www.datamuse.com/api/
-
 import { useState } from "react";
 import Button from "./components/Button";
 import Item from "./components/Item";
