@@ -1,3 +1,5 @@
+// Datamuse API: https://www.datamuse.com/api/
+
 import { useState } from "react";
 import Button from "./components/Button";
 import Item from "./components/Item";
@@ -8,6 +10,7 @@ function App() {
   const [displayWord, setDisplayWord] = useState("");
   const [words, setWords] = useState([]);
   const [savedWords, setSavedWords] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const saveWord = (word) => {
     setSavedWords((prev) => [...prev, word]);
@@ -16,7 +19,7 @@ function App() {
   return (
     <main className="container">
       <h1 className="row">Rhyme Finder (579 Problem Set 6)</h1>
-       <h2>https://github.com/lxt619/ps6</h2>
+      <h2>https://github.com/lxt619/ps6</h2>
       <div className="row">
         <div className="col">
           Saved words: <span id="saved_words">{savedWords.join(", ")}</span>
@@ -33,14 +36,16 @@ function App() {
           />
           <Button
             className="btn btn-primary"
-            onClick={() => searchRhyming(searchInput, setDisplayWord, setWords)}
+            onClick={() =>
+              searchRhyming(searchInput, setDisplayWord, setWords, setLoading)
+            }
           >
             Show rhyming words
           </Button>
           <Button
             className="btn btn-secondary"
             onClick={() =>
-              searchSynonyms(searchInput, setDisplayWord, setWords)
+              searchSynonyms(searchInput, setDisplayWord, setWords, setLoading)
             }
           >
             Show synonyms
@@ -54,13 +59,21 @@ function App() {
           </h2>
         </div>
       )}
-      <div className="container-md row">
-        <ul id="word_output" className="col">
-          {words.map((item, index) => {
-            return <Item key={index} item={item} saveWord={saveWord} />;
-          })}
-        </ul>
-      </div>
+      {loading ? (
+        <h3>Loading...</h3>
+      ) : (
+        <div className="container-md row">
+          <ul id="word_output" className="col">
+            {words.length === 0 ? (
+              <h4>No rhymes found</h4>
+            ) : (
+              words.map((item, index) => {
+                return <Item key={index} item={item} saveWord={saveWord} />;
+              })
+            )}
+          </ul>
+        </div>
+      )}
     </main>
   );
 }
